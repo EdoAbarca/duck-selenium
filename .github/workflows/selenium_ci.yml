@@ -26,21 +26,27 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install selenium
-
-      # 4. Instala Chrome y ChromeDriver (¿Necesario?)
-      - name: Install Chrome and ChromeDriver
+          
+        # 4. Usa el chromedriver local si ya está presente, si no lo descarga
+      - name: Set up ChromeDriver
         run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable  # Instala Chrome
-          CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
-          echo "Chrome version: $CHROME_VERSION"
-          # Descarga ChromeDriver compatible
-          wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION -O chromedriver-version.txt
-          CHROMEDRIVER_VERSION=$(cat chromedriver-version.txt)
-          wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/
-          sudo chmod +x /usr/local/bin/chromedriver
+          if [ -f ./chromedriver ]; then
+            echo "Using local chromedriver"
+            sudo mv ./chromedriver /usr/local/bin/
+            sudo chmod +x /usr/local/bin/chromedriver
+          else
+            echo "Downloading Chrome and ChromeDriver"
+            sudo apt-get update
+            sudo apt-get install -y google-chrome-stable
+            CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
+            echo "Chrome version: $CHROME_VERSION"
+            wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION -O chromedriver-version.txt
+            CHROMEDRIVER_VERSION=$(cat chromedriver-version.txt)
+            wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+            unzip chromedriver_linux64.zip
+            sudo mv chromedriver /usr/local/bin/
+            sudo chmod +x /usr/local/bin/chromedriver
+          fi
 
       # 5. Ejecuta el test de Selenium
       - name: Run Selenium Test
