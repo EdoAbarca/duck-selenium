@@ -52,7 +52,7 @@ jobs:
       # 4. Mueve el binario a /usr/local/bin
       - name: Move ChromeDriver to PATH
         run: |
-          sudo mv chromedriver_linux64/chromedriver /usr/local/bin/chromedriver
+          sudo mv chromedriver_linux64/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Run Selenium Test
