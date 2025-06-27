@@ -55,10 +55,10 @@ jobs:
           sudo mv chromedriver_linux64/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
 
-      - name: Run Selenium Test
+      - name: Run Selenium Test #5. Ejecuta el test de Selenium
         run: python test_busqueda.py
 
-      - name: Upload test results
+      - name: Upload test results #6. Sube los resultados del test
         if: always()
         uses: actions/upload-artifact@v4
         with:
