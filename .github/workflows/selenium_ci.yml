@@ -38,14 +38,16 @@ jobs:
           path: chromedriver_linux64
           key: ${{ runner.os }}-chromedriver-${{ env.CHROME_VERSION }}
 
-      # 3. Descarga ChromeDriver si no está cacheado
+      # 3. Descarga ChromeDriver si no está cacheado (Chrome for Testing)
       - name: Download ChromeDriver if not cached
         if: steps.cache-chromedriver.outputs.cache-hit != 'true'
         run: |
-          wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION} -O chromedriver-version.txt
-          CHROMEDRIVER_VERSION=$(cat chromedriver-version.txt)
-          wget https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
+          # Obtén la versión completa de Chrome instalada
+          CHROME_VERSION_FULL=$(google-chrome --version | awk '{print $3}')
+          echo "Chrome full version: $CHROME_VERSION_FULL"
+          # Descarga el ChromeDriver correspondiente desde Chrome for Testing
+          wget https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION_FULL}/linux64/chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip -d chromedriver_linux64
 
       # 4. Mueve el binario a /usr/local/bin
       - name: Move ChromeDriver to PATH
