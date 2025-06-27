@@ -50,7 +50,7 @@ jobs:
       # (Opcional) Guarda reportes como artefactos
       - name: Upload test results
         if: always()  # Sube artefactos aunque falle
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: selenium-results
           path: |
